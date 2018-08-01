@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="main">
+    <span class="hidden-print" th:utext="${viewMessage}"></span>
+
+    <div class="btn-toolbar" role="group">
+        <a th:href="@{/admin/subject_edit}" class="btn btn-primary">Добавить</a>
+        <a id="edit_element" href="#" class="btn btn-primary">Редактировать</a>
+        <a href="#" onclick="document.forms['delete_element'].submit()" class="btn btn-primary">Удалить
+            <form class="hidden-print" id="delete_element" action="#" method="post">
+            </form>
+        </a>
+        <label for="file_import" class="btn btn-primary">Импорт
+            <form method="post" enctype="multipart/form-data"
+                  action="/admin/import/subjects" th:action="@{/admin/import/subjects}">
+                <input id="file_import" class="file_input" type="file" name="file" onchange="form.submit()"/>
+            </form>
+        </label>
+        <a th:href="@{/admin/export/subjects}" href="/admin/export/subjects" class="btn btn-primary">Экспорт</a>
+    </div>
+    <br/>
+    <h4>Спиcок объектов</h4>
+    <br/>
+    <div class="tablediv">
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+            <tr>
+                <td>Наименование</td>
+                <td>Ключевые слова</td>
+                <td>Параметры</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${list.empty}">
+                <td colspan="3">Список пуст</td>
+            </tr>
+            <tr class="selectable_row" th:each="item, iter : ${list}" th:id="${'row_' + iter.count}"
+                th:onclick="${'javascript:onRowSelect(''admin/subject_edit'', ''row_' + iter.count +''', ' + item.id + ')'}">
+                <td th:text="${item.name}">name</td>
+                <td th:text="${item.keyWordsToString()}">keywords</td>
+                <td th:text="${item.parametersToString()}">parameters</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

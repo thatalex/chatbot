@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<ul th:fragment="navbar" sec:authorize="hasAuthority('ROLE_ADMIN')" class="nav navbar-nav">
+    <li>
+        <a href="admin/keywords" th:href="@{/admin/keywords}">Ключевые слова</a>
+    </li>
+    <li>
+        <a href="admin/parameters" th:href="@{/admin/parameters}">Параметры</a>
+    </li>
+    <li>
+        <a href="admin/subject" th:href="@{/admin/subjects}">Объекты</a>
+    </li>
+    <li>
+        <a href="admin/answers" th:href="@{/admin/answers}">Ответы</a>
+    </li>
+</ul>
+</body>
+</html>

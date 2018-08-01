@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <div th:fragment="header-css">
+        <!-- this is header-css -->
+        <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+        <script src="/webjars/jquery/3.1.1/jquery.min.js"/>
+        <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"/>
+        <script  th:inline="javascript" th:src="@{/js/rowselect.js}"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <!-- this is header -->
+    <nav class="navbar navbar-expand-lg navbar-inverse">
+            <div class="navbar-header">
+                <a sec:authorize="!isAuthenticated()" class="navbar-brand" th:href="@{/}">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"/>&nbsp;Чат
+                </a>
+                <div sec:authorize="isAuthenticated()">
+                    <a class="navbar-brand"
+                       th:with="baseUrl=(${#authorization.expression('hasAuthority(''ADMIN'')')} ? 'admin/home' : '/')"
+                       th:href="@{${baseUrl}}">
+                        <span class="glyphicon glyphicon-home" aria-hidden="true"/>&nbsp;Чат
+                    </a>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse">
+                <div th:replace="admin/header :: navbar"/>
+                <ul class="nav navbar-nav navbar-right">
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/login" th:href="@{/login}">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Вход
+                        </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a><span class="glyphicon glyphicon-user"/>  <span sec:authentication="name"/>  </a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"/>&nbsp;Выход
+                        </a>
+                        <form style="visibility: hidden" id="form" method="post" action="#"
+                              th:action="@{/logout}"></form>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+</div>
+
+</body>
+</html>

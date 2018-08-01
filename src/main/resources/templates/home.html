@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chatbot</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container" style="height: 90vh">
+    <form th:object="${conversation}" autocomplete="off"
+          th:action="@{/}" method="post" class="form-horizontal" style="height: 90vh">
+        <div class="form-group" style="height: 70vh">
+            <label for="ans">Ответы:</label>
+            <div class="form-control col-10 offet-1 container-fluid pre-scrollable" id="ans" style="min-height: 90%">
+                <div th:each="entry: ${conversation.entries}">
+                    <p th:text="${entry.question}" style="font-size: 15pt"></p>
+                    <p th:text="${entry.answer}" style="font-size: 15pt; color: dodgerblue; white-space: pre-line"></p>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1" for="qst">Вопрос:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="qst" name="question" th:value="${question}"/>
+            </div>
+            <button type="submit" class="col-sm-1 btn btn-primary">Ввод</button>
+        </div>
+    </form>
+</div>
+<!-- /.container -->
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

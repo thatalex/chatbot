@@ -1,0 +1,35 @@
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+.tablediv{
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+body {
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+    height: 100%;
+    font-size: 15pt;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+.highlight {
+    background-color: #FFFF99;
+}
+
+.file_input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}

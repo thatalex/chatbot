@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="main">
+    <span class="hidden-print" th:utext="${viewMessage}"></span>
+    <form id="edit_element" action="#" th:action="@{/admin/keyword_edit}" method="post">
+        <div th:object="${keyword}" class="hidden-print form-horizontal">
+            <input class="form-control" id="value_id" type="hidden" th:field="*{id}"/>
+            <div class="col-sm-3">
+                <input class="form-control" id="value_name" type="text" th:field="*{value}"/>
+            </div>
+            <div class="col-sm-7">
+                <input class="form-control" id="value_words" type="text" th:field="*{wordsString}"/>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <br/>
+    <div class="btn-toolbar col-sm-12" role="group">
+        <a href="#"
+           onclick="document.forms['edit_element'].action+='?action=save';document.forms['edit_element'].submit()"
+           class="btn btn-primary">Сохранить</a>
+        <a href="#"
+           onclick="document.forms['edit_element'].action+='?action=delete';document.forms['edit_element'].submit()"
+           class="btn btn-primary">Удалить</a>
+        <label for="file_import" class="btn btn-primary">Импорт
+            <form method="post" enctype="multipart/form-data"
+                  action="/admin/import/keywords" th:action="@{/admin/import/keywords}">
+                <input id="file_import" class="file_input" type="file" name="file" onchange="form.submit()"/>
+            </form>
+        </label>
+        <a th:href="@{/admin/export/keywords}" href="/admin/export/keywords" class="btn btn-primary">Экспорт</a>
+    </div>
+    <br/>
+    <br/>
+    <h4>Ключевые слова</h4>
+    <div class="tablediv">
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+            <tr>
+                <td>Ключевое слово</td>
+                <td>Синонимы</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${list.empty}">
+                <td colspan="2">Список пуст</td>
+            </tr>
+            <tr class="selectable_row" th:each="item, iter : ${list}" th:id="${'row_' + iter.count}"
+                th:onclick="${'onRowSelect(1,''row_'+iter.count+ ''',1);document.getElementById(''value_name'').value=''' + item.value+''';' +
+            'document.getElementById(''value_id'').value=''' + item.id+''';' +
+            'document.getElementById(''value_words'').value=''' + item.wordsToString()+''''}">
+                <td th:text="${item.value}">value</td>
+                <td th:text="${item.wordsToString()}">words</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="main">
+    <span class="hidden-print" th:utext="${viewMessage}"></span>
+
+    <div class="btn-toolbar" role="group">
+        <a th:href="@{/admin/answer_edit}" class="btn btn-primary">Добавить</a>
+        <a id="edit_element" href="#" class="btn btn-primary">Редактировать</a>
+        <a href="#" onclick="document.forms['delete_element'].submit()" class="btn btn-primary">Удалить
+            <form class="hidden-print" id="delete_element" action="#" method="post"/>
+        </a>
+        <label for="file_import" class="btn btn-primary">Импорт
+            <form method="post" enctype="multipart/form-data"
+                  action="/admin/import/answers" th:action="@{/admin/import/answers}">
+                <input id="file_import" class="file_input" type="file" name="file" onchange="form.submit()"/>
+            </form>
+        </label>
+        <a th:href="@{/admin/export/answers}" href="/admin/export/answers"
+           class="btn btn-primary">Экспорт</a>
+    </div>
+
+    <br/>
+    <h4>Спиcок ответов</h4>
+    <br/>
+    <div class="tablediv">
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+            <tr>
+                <td>Наименование</td>
+                <td>Ключевые слова</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${list.empty}">
+                <td colspan="2">Список пуст</td>
+            </tr>
+            <tr class="selectable_row" th:each="item, iter : ${list}" th:id="${'row_' + iter.count}"
+                th:onclick="${'javascript:onRowSelect(''admin/answer_edit'', ''row_' + iter.count +''', ' + item.id + ')'}">
+                <td th:text="${item.value}">value</td>
+                <td th:text="${item.keyWordsToString()}">keywords</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="main">
+    <span class="hidden-print" th:utext="${viewMessage}"></span>
+    <form class="hidden-print" id="delete_element" action="#" method="post">
+        <div class="btn-toolbar" role="group">
+            <a th:href="@{/admin/parameter_edit}" class="btn btn-primary">Добавить</a>
+            <a id="edit_element" href="#" class="btn btn-primary">Редактировать</a>
+            <a href="#" onclick="document.forms['delete_element'].submit()" class="btn btn-primary">Удалить</a>
+        </div>
+    </form>
+    <br/>
+    <h4>Спиcок параметров</h4>
+    <br/>
+    <div class="tablediv">
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+            <tr>
+                <td>Наименование</td>
+                <td>Ключевые слова</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${list.empty}">
+                <td colspan="2">Список пуст</td>
+            </tr>
+            <tr class="selectable_row" th:each="item, iter : ${list}" th:id="${'row_' + iter.count}"
+                th:onclick="${'javascript:onRowSelect(''admin/parameter_edit'', ''row_' + iter.count +''', ' + item.id + ')'}">
+                <td th:text="${item.name}">name</td>
+                <td th:text="${item.keyWordsToString()}">keywords</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

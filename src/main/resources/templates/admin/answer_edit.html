@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Store</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:fragment="main" class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form autocomplete="off" th:action="@{/admin/answer_edit(action='save')}"
+                  th:object="${answer}" method="post" class="form-horizontal" role="form">
+                <h1 class="col-sm-9">Ответ</h1>
+                <input type="hidden" th:value="*{id}" th:field="*{id}"/>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label>Наименование:</label>
+                        <input type="text" th:field="*{value}" placeholder="Значение; Ключевое слово (Синоним, ...); Ключевое слово..."
+                               class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <label>Ключевые слова:</label>
+                        <select size="25" class="form-control" multiple="multiple" th:field="*{keyWords}"
+                                th:remove="all-but-first">
+                            <option th:each="keyword, iter: ${keyword_list}"
+                                    th:field="*{keyWords}"
+                                    th:value="${keyword.id}"
+                                    th:text="${keyword.value + ' (' + keyword.wordsToString() + ')'}"
+                            />
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <div class="btn-toolbar" role="group" aria-label="">
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                            <a th:href="@{/admin/answers}" class="btn btn-primary">Вернуться</a>
+                        </div>
+
+                    </div>
+                </div>
+                <span th:utext="${viewMessage}"></span>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

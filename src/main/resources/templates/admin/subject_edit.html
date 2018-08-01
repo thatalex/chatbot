@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Store</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+<div th:fragment="main" class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <form th:object="${subject}" id="subject_form" autocomplete="off"
+                  th:action="@{/}"
+                  method="post" class="form-horizontal col-md-12" role="form">
+                <h1 class="col-sm-12">Объект</h1>
+                <input type="hidden" id="subject_id" th:field="*{id}"/>
+                <div class="form-group">
+                    <label>Наименование:</label>
+                    <input type="text" th:field="*{name}" placeholder="Наименование; Ключевое слово (Синоним, ...); Ключевое слово..."
+                           class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label>Ключевые слова:</label>
+                    <select size="12" class="form-control" multiple="multiple" th:field="*{keyWords}"
+                            th:remove="all-but-first">
+                        <option th:each="keyword, iter: ${keyword_list}"
+                                th:field="*{keyWords}"
+                                th:value="${keyword.id}"
+                                th:text="${keyword}"
+                        />
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="btn-toolbar" role="group" aria-label="">
+                        <button th:onclick="${'document.getElementById(''subject_form'').action+=''admin/subject_edit?action=add'';this.submit()'}" class="btn btn-primary">
+                            Добавить
+                        </button>
+                        <button th:onclick="${'document.getElementById(''subject_form'').action+=''admin/subject_edit?action=save'';this.submit()'}"
+                                type="submit" class="btn btn-primary">
+                            Сохранить
+                        </button>
+                        <a th:href="@{/admin/subjects}" class="btn btn-primary">Вернуться</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Параметры:</label>
+                    <table class="table table-bordered table-responsive">
+                        <thead class="thead-dark">
+                        <tr>
+                            <td>Параметр</td>
+                            <td>Значение</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="*{subjectParameterValues.empty}">
+                            <td colspan="2">Список пуст</td>
+                        </tr>
+                        <tr class="selectable_row" th:each="item, iter : *{subjectParameterValues}"
+                            th:id="${'row_' + iter.count}"
+                            th:onclick="${'onRowSelect(''#'',''row_'+iter.count+''', '+subject.id+
+                    ');document.getElementById(''param_value_param'').value=''' + item.parameter+''';' +
+                                        'document.getElementById(''param_value_id'').value=''' + item.id+''';' +
+                                        'document.getElementById(''param_value_value'').value=''' + item.value+''''}">
+                            <td th:field="*{subjectParameterValues}" th:text="${item.parameter.name + ' ('+item.parameter.keyWordsToString() +')'}">parameter</td>
+                            <td th:text="${item.value}">value</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </form>
+            <label>Выбранный параметр:</label>
+            <form class="hidden-print form-horizontal" id="edit_form" action="#"
+                  th:action="@{/admin/param_edit}" method="post">
+                <div th:object="${param_value}" class="form-group">
+                    <input class="form-control" id="param_value_id" type="hidden" th:field="${param_value.id}"/>
+                    <div class="col-sm-4 selectContainer">
+                        <select id="param_value_param" class="form-control" th:field="${param_value.parameter}"
+                                th:remove="all-but-first">
+                            <option th:each="parameter, iter: ${parameter_list}"
+                                    th:field="${param_value.parameter}"
+                                    th:value="${parameter.id}"
+                                    th:text="${parameter.name + ' ('+parameter.keyWordsToString() +')'}"
+                            />
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <input class="form-control" id="param_value_value" type="text"
+                               th:field="${param_value.value}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <a href="#"
+                           th:onclick="${'document.forms[''edit_form''].action+=''?action=save/'+subject.id+''';document.forms[''edit_form''].submit()'}"
+                           class="form-control btn btn-primary">Сохранить</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="#"
+                           th:onclick="${'document.forms[''edit_form''].action+=''?action=add/'+subject.id+''';document.forms[''edit_form''].submit()'}"
+                           class="form-control btn btn-primary">Добавить</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="#"
+                           th:onclick="${'document.forms[''edit_form''].action+=''?action=delete/'+subject.id+''';document.forms[''edit_form''].submit()'}"
+                           class="form-control btn btn-primary">Удалить</a>
+                    </div>
+                </div>
+            </form>
+            <br/>
+            <br/>
+
+
+            <span th:utext="${viewMessage}"></span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
